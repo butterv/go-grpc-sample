@@ -1,1 +1,1 @@
-# grpc-sample
+# go-grpc-server
