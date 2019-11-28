@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package user;
+option go_package = "github.com/istsh/go-grpc-sample/app/pb/v1/user";
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+service UserService {
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
+        option (google.api.http) = {
+            post: "/v1/user"
+            body: "*"
+        };
+    }
+    rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse) {
+        option (google.api.http) = {
+            put: "/v1/user/password"
+            body: "*"
+        };
+    }
+}
+
+message CreateUserRequest {
+    string email = 1 [(validate.rules).string = { min_len: 3, max_len: 254 }];
+    string password = 2 [(validate.rules).string = { min_len: 8, max_len: 64 }];
+}
+
+message CreateUserResponse {
+}
+
+message ChangePasswordRequest {
+    string current_password = 1 [(validate.rules).string = { min_len: 8, max_len: 64 }];
+    string new_password = 2 [(validate.rules).string = { min_len: 8, max_len: 64 }];
+}
+
+message ChangePasswordResponse {
+}

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package error;
+option go_package = "github.com/istsh/go-grpc-sample/app/pb/v1/error";
+
+message ErrorCode {
+    string error_code = 1;
+}
+
+message Error {
+    ErrorDetail error = 1;
+
+    message ErrorDetail {
+        string error_code = 1;
+        string locale = 2;
+        string message = 3;
+    }
+}
