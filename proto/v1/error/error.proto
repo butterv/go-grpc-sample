@@ -3,6 +3,8 @@ syntax = "proto3";
 package error;
 option go_package = "github.com/istsh/go-grpc-sample/app/pb/v1/error";
 
+// import "google/rpc/error_details.proto";
+
 message ErrorCode {
     string error_code = 1;
 }
@@ -14,5 +16,6 @@ message Error {
         string error_code = 1;
         string locale = 2;
         string message = 3;
+        // google.rpc.LocalizedMessage _ = 4;
     }
 }
