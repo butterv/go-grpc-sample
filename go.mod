@@ -9,6 +9,8 @@ require (
 	github.com/gofrs/uuid v3.2.0+incompatible // indirect
 	github.com/golang/protobuf v1.3.2
 	github.com/grpc-ecosystem/grpc-gateway v1.12.1
+	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334 // indirect
+	github.com/lyft/protoc-gen-star v0.4.12 // indirect
 	github.com/spf13/cobra v0.0.5 // indirect
 	github.com/spf13/viper v1.5.0 // indirect
 	github.com/volatiletech/inflect v0.0.0-20170731032912-e7201282ae8d // indirect
