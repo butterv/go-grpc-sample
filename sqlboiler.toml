@@ -1,5 +1,5 @@
-pkgname="db"
-output="app/domain/db"
+pkgname="database"
+output="app/interfaces/database"
 add-global-variants=true
 add-panic-variants=true
 
@@ -9,5 +9,5 @@ add-panic-variants=true
   port   = 3306
   user   = "root"
   pass   = "password"
-  sslmode= "disable"
+  sslmode= "false"
   blacklist = ["schema_migrations"]
