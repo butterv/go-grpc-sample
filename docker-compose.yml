@@ -1,0 +1,10 @@
+version: "3.5"
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: sample
+    ports:
+      - 3306:3306
+    command: ["mysqld", "--character-set-server", "utf8mb4"]
