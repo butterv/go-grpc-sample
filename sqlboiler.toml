@@ -1,5 +1,5 @@
-pkgname="database"
-output="app/interfaces/database"
+pkgname="boil"
+output="app/infrastructure/repository/persistence/boil"
 add-global-variants=true
 add-panic-variants=true
 

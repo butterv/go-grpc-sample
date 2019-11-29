@@ -31,3 +31,6 @@ stop:
 generate:
 	GO111MODULE=on \
 	go generate ./...
+
+sqlboiler:
+	sqlboiler mysql
