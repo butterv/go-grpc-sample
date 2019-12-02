@@ -1,16 +1,18 @@
 package repository
 
-import "github.com/istsh/go-grpc-sample/app/entity/model"
+import (
+	"context"
+
+	"github.com/istsh/go-grpc-sample/app/entity/model"
+)
 
 // UserTokenRepositoryAccess is a readonly repository for user tokens.
 type UserTokenRepositoryAccess interface {
-	FindByToken(token string) (*model.UserToken, error)
+	FindByToken(ctx context.Context, token string) (*model.UserToken, error)
 }
 
-// UserTokenRepositoryModify is a read/write repository for user tokens.
+// UserTokenRepositoryModify is a write repository for user tokens.
 type UserTokenRepositoryModify interface {
-	UserTokenRepositoryAccess
-
-	Create(userID model.UserID, passwordHash string) error
-	Update(userID model.UserID, passwordHash string) error
+	Create(ctx context.Context, userID model.UserID, token string) error
+	Delete(ctx context.Context, id model.UserTokenID) error
 }

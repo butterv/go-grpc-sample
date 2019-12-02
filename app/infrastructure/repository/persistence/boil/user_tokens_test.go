@@ -677,7 +677,7 @@ func testUserTokensSelect(t *testing.T) {
 }
 
 var (
-	userTokenDBTypes = map[string]string{`ID`: `bigint`, `UserID`: `varchar`, `Token`: `varchar`, `CreatedAt`: `datetime`, `UpdatedAt`: `datetime`}
+	userTokenDBTypes = map[string]string{`ID`: `bigint`, `UserID`: `varchar`, `Token`: `varchar`, `CreatedAt`: `datetime`, `DeletedAt`: `datetime`}
 	_                = bytes.MinRead
 )
 

@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/friendsofgo/errors"
+	"github.com/volatiletech/null"
 	"github.com/volatiletech/sqlboiler/boil"
 	"github.com/volatiletech/sqlboiler/queries"
 	"github.com/volatiletech/sqlboiler/queries/qm"
@@ -27,7 +28,7 @@ type UserToken struct {
 	UserID    string    `boil:"user_id" json:"user_id" toml:"user_id" yaml:"user_id"`
 	Token     string    `boil:"token" json:"token" toml:"token" yaml:"token"`
 	CreatedAt time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
-	UpdatedAt time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
+	DeletedAt null.Time `boil:"deleted_at" json:"deleted_at,omitempty" toml:"deleted_at" yaml:"deleted_at,omitempty"`
 
 	R *userTokenR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L userTokenL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -38,13 +39,13 @@ var UserTokenColumns = struct {
 	UserID    string
 	Token     string
 	CreatedAt string
-	UpdatedAt string
+	DeletedAt string
 }{
 	ID:        "id",
 	UserID:    "user_id",
 	Token:     "token",
 	CreatedAt: "created_at",
-	UpdatedAt: "updated_at",
+	DeletedAt: "deleted_at",
 }
 
 // Generated where
@@ -65,18 +66,41 @@ func (w whereHelperint64) IN(slice []int64) qm.QueryMod {
 	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
 }
 
+type whereHelpernull_Time struct{ field string }
+
+func (w whereHelpernull_Time) EQ(x null.Time) qm.QueryMod {
+	return qmhelper.WhereNullEQ(w.field, false, x)
+}
+func (w whereHelpernull_Time) NEQ(x null.Time) qm.QueryMod {
+	return qmhelper.WhereNullEQ(w.field, true, x)
+}
+func (w whereHelpernull_Time) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
+func (w whereHelpernull_Time) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
+func (w whereHelpernull_Time) LT(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LT, x)
+}
+func (w whereHelpernull_Time) LTE(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LTE, x)
+}
+func (w whereHelpernull_Time) GT(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GT, x)
+}
+func (w whereHelpernull_Time) GTE(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GTE, x)
+}
+
 var UserTokenWhere = struct {
 	ID        whereHelperint64
 	UserID    whereHelperstring
 	Token     whereHelperstring
 	CreatedAt whereHelpertime_Time
-	UpdatedAt whereHelpertime_Time
+	DeletedAt whereHelpernull_Time
 }{
 	ID:        whereHelperint64{field: "`user_tokens`.`id`"},
 	UserID:    whereHelperstring{field: "`user_tokens`.`user_id`"},
 	Token:     whereHelperstring{field: "`user_tokens`.`token`"},
 	CreatedAt: whereHelpertime_Time{field: "`user_tokens`.`created_at`"},
-	UpdatedAt: whereHelpertime_Time{field: "`user_tokens`.`updated_at`"},
+	DeletedAt: whereHelpernull_Time{field: "`user_tokens`.`deleted_at`"},
 }
 
 // UserTokenRels is where relationship names are stored.
@@ -100,9 +124,9 @@ func (*userTokenR) NewStruct() *userTokenR {
 type userTokenL struct{}
 
 var (
-	userTokenAllColumns            = []string{"id", "user_id", "token", "created_at", "updated_at"}
+	userTokenAllColumns            = []string{"id", "user_id", "token", "created_at", "deleted_at"}
 	userTokenColumnsWithoutDefault = []string{"user_id", "token"}
-	userTokenColumnsWithDefault    = []string{"id", "created_at", "updated_at"}
+	userTokenColumnsWithDefault    = []string{"id", "created_at", "deleted_at"}
 	userTokenPrimaryKeyColumns     = []string{"id"}
 )
 
@@ -763,9 +787,6 @@ func (o *UserToken) Insert(ctx context.Context, exec boil.ContextExecutor, colum
 		if o.CreatedAt.IsZero() {
 			o.CreatedAt = currTime
 		}
-		if o.UpdatedAt.IsZero() {
-			o.UpdatedAt = currTime
-		}
 	}
 
 	if err := o.doBeforeInsertHooks(ctx, exec); err != nil {
@@ -897,12 +918,6 @@ func (o *UserToken) UpdateGP(ctx context.Context, columns boil.Columns) int64 {
 // See boil.Columns.UpdateColumnSet documentation to understand column list inference for updates.
 // Update does not automatically update the record in case of default values. Use .Reload() to refresh the records.
 func (o *UserToken) Update(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) (int64, error) {
-	if !boil.TimestampsAreSkipped(ctx) {
-		currTime := time.Now().In(boil.GetLocation())
-
-		o.UpdatedAt = currTime
-	}
-
 	var err error
 	if err = o.doBeforeUpdateHooks(ctx, exec); err != nil {
 		return 0, err
@@ -1103,7 +1118,6 @@ func (o *UserToken) Upsert(ctx context.Context, exec boil.ContextExecutor, updat
 		if o.CreatedAt.IsZero() {
 			o.CreatedAt = currTime
 		}
-		o.UpdatedAt = currTime
 	}
 
 	if err := o.doBeforeUpsertHooks(ctx, exec); err != nil {

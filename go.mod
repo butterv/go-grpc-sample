@@ -3,16 +3,16 @@ module github.com/istsh/go-grpc-sample
 go 1.12
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.3.3 // indirect
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
 	github.com/friendsofgo/errors v0.9.2
-	github.com/go-sql-driver/mysql v1.4.1 // indirect
+	github.com/go-sql-driver/mysql v1.4.1
 	github.com/gofrs/uuid v3.2.0+incompatible // indirect
 	github.com/golang/protobuf v1.3.2
 	github.com/grpc-ecosystem/grpc-gateway v1.12.1
-	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334 // indirect
-	github.com/lyft/protoc-gen-star v0.4.12 // indirect
-	github.com/spf13/cobra v0.0.5 // indirect
-	github.com/spf13/viper v1.5.0 // indirect
+	github.com/kat-co/vala v0.0.0-20170210184112-42e1d8b61f12
+	github.com/kr/pretty v0.1.0 // indirect
+	github.com/spf13/viper v1.5.0
 	github.com/volatiletech/inflect v0.0.0-20170731032912-e7201282ae8d // indirect
 	github.com/volatiletech/null v8.0.0+incompatible
 	github.com/volatiletech/sqlboiler v3.6.1+incompatible

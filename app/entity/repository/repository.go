@@ -1,9 +1,5 @@
 package repository
 
-import (
-	"context"
-)
-
 // Transaction provides a set of repository reader/writer methods.
 type Transaction interface {
 	User() UserRepositoryModify
@@ -24,7 +20,5 @@ type Connection interface {
 // Repository provides an abstract connection method.
 type Repository interface {
 	//
-	NewConnectionWithContext(ctx context.Context) (Connection, error)
-	// MustConnection is for testing.
-	MustConnection(ctx context.Context) Connection
+	NewConnection() Connection
 }

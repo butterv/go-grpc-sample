@@ -25,7 +25,7 @@ CREATE TABLE user_tokens (
     user_id    VARCHAR(128) NOT NULL,
     token      VARCHAR(128) NOT NULL,
     created_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME              DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     CONSTRAINT fk_user_tokens_user_id
         FOREIGN KEY (user_id) REFERENCES users (id)
