@@ -48,11 +48,11 @@ func (r inmemoryTxUserTokenRepository) Create(ctx context.Context, userID model.
 	return nil
 }
 
-func (r inmemoryTxUserTokenRepository) Delete(ctx context.Context, id model.UserTokenID) error {
+func (r inmemoryTxUserTokenRepository) Delete(ctx context.Context, userID model.UserID) error {
 	var userTokens []*model.UserToken
 
 	for _, ut := range r.s.userTokens {
-		if ut.ID == id {
+		if ut.UserID == userID {
 			continue
 		}
 		userTokens = append(userTokens, ut)

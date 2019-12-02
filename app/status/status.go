@@ -34,17 +34,6 @@ var (
 		},
 	))
 
-	// DBConnectionError is a gRPC status when a database connection error occurs.
-	DBConnectionError = must(status.New(codes.Internal, "database connection error").WithDetails(
-		&errorpb.ErrorCode{
-			ErrorCode: "DB_CONNECTION_ERROR",
-		},
-		&errdetails.LocalizedMessage{
-			Locale:  LocaleJaJp,
-			Message: "DB接続エラーが発生しました。",
-		},
-	))
-
 	// Unauthenticated is a gRPC status when `auth` cannot be gotten from the context.
 	Unauthenticated = must(status.New(codes.Unauthenticated, "not authenticated").WithDetails(
 		&errorpb.ErrorCode{
@@ -53,6 +42,36 @@ var (
 		&errdetails.LocalizedMessage{
 			Locale:  LocaleJaJp,
 			Message: "ユーザーの認証ができませんでした。",
+		},
+	))
+
+	//
+	FailedToCreateUser = must(status.New(codes.Internal, "failed to create user").WithDetails(
+		&errorpb.ErrorCode{
+			ErrorCode: "FAILED_TO_CREATE_USER",
+		},
+		&errdetails.LocalizedMessage{
+			Locale:  LocaleJaJp,
+			Message: "ユーザー登録に失敗しました。",
+		},
+		&errdetails.LocalizedMessage{
+			Locale:  LocaleEnUs,
+			Message: "Failed to create user",
+		},
+	))
+
+	//
+	FailedToChangePassword = must(status.New(codes.Internal, "failed to change password").WithDetails(
+		&errorpb.ErrorCode{
+			ErrorCode: "FAILED_TO_CHANGE_PASSWORD",
+		},
+		&errdetails.LocalizedMessage{
+			Locale:  LocaleJaJp,
+			Message: "パスワードの変更に失敗しました。",
+		},
+		&errdetails.LocalizedMessage{
+			Locale:  LocaleEnUs,
+			Message: "Failed to change password",
 		},
 	))
 

@@ -63,9 +63,9 @@ func (r txUserTokenRepository) Create(ctx context.Context, userID model.UserID, 
 	return ut.Insert(ctx, r.tx, sb.Infer())
 }
 
-func (r txUserTokenRepository) Delete(ctx context.Context, id model.UserTokenID) error {
+func (r txUserTokenRepository) Delete(ctx context.Context, userID model.UserID) error {
 	ut := boil.UserToken{
-		ID:        int64(id),
+		UserID:    string(userID),
 		DeletedAt: null.TimeFrom(time.Now()),
 	}
 	_, err := ut.Update(ctx, r.tx, sb.Infer())

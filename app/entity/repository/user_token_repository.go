@@ -14,5 +14,5 @@ type UserTokenRepositoryAccess interface {
 // UserTokenRepositoryModify is a write repository for user tokens.
 type UserTokenRepositoryModify interface {
 	Create(ctx context.Context, userID model.UserID, token string) error
-	Delete(ctx context.Context, id model.UserTokenID) error
+	Delete(ctx context.Context, userID model.UserID) error
 }

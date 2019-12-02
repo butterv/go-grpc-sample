@@ -13,12 +13,6 @@ service UserService {
             body: "*"
         };
     }
-    rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse) {
-        option (google.api.http) = {
-            put: "/v1/user/password"
-            body: "*"
-        };
-    }
 }
 
 message CreateUserRequest {
@@ -27,12 +21,4 @@ message CreateUserRequest {
 }
 
 message CreateUserResponse {
-}
-
-message ChangePasswordRequest {
-    string current_password = 1 [(validate.rules).string = { min_len: 8, max_len: 64 }];
-    string new_password = 2 [(validate.rules).string = { min_len: 8, max_len: 64 }];
-}
-
-message ChangePasswordResponse {
 }
