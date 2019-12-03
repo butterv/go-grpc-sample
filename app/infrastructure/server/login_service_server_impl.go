@@ -31,7 +31,7 @@ func (s *loginServiceServer) Login(ctx context.Context, req *loginpb.LoginReques
 	logger := log.New(ctx)
 	con := s.r.NewConnection()
 
-	u, err := con.User().FindByEmail(ctx, req.GetEmail())
+	u, err := con.User().FindByEmail(req.GetEmail())
 	if err != nil {
 		logger.Error(err.Error())
 		return nil, appstatus.FailedToLogin.Err()

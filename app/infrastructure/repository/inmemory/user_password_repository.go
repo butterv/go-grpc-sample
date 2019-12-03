@@ -1,8 +1,6 @@
 package inmemory
 
 import (
-	"context"
-	"database/sql"
 	"time"
 
 	"github.com/istsh/go-grpc-sample/app/entity/model"
@@ -11,17 +9,12 @@ import (
 
 type inmemoryUserPasswordRepository struct {
 	repository.UserPasswordRepositoryAccess
-
-	s *Store
-}
-
-type inmemoryTxUserPasswordRepository struct {
 	repository.UserPasswordRepositoryModify
 
 	s *Store
 }
 
-func (r inmemoryUserPasswordRepository) Find(ctx context.Context, userID model.UserID) (*model.UserPassword, error) {
+func (r inmemoryUserPasswordRepository) Find(userID model.UserID) (*model.UserPassword, error) {
 	for _, up := range r.s.userPasswords {
 		if up.UserID == userID {
 			return up, nil
@@ -31,11 +24,8 @@ func (r inmemoryUserPasswordRepository) Find(ctx context.Context, userID model.U
 	return nil, nil
 }
 
-func (r inmemoryTxUserPasswordRepository) Create(ctx context.Context, userID model.UserID, passwordHash string) error {
-	now := sql.NullTime{
-		Time:  time.Now(),
-		Valid: true,
-	}
+func (r inmemoryUserPasswordRepository) Create(userID model.UserID, passwordHash string) error {
+	now := time.Now()
 
 	up := &model.UserPassword{
 		UserID:       userID,
@@ -48,13 +38,10 @@ func (r inmemoryTxUserPasswordRepository) Create(ctx context.Context, userID mod
 	return nil
 }
 
-func (r inmemoryTxUserPasswordRepository) Update(ctx context.Context, userID model.UserID, passwordHash string) error {
+func (r inmemoryUserPasswordRepository) Update(userID model.UserID, passwordHash string) error {
 	for i, up := range r.s.userPasswords {
 		if up.UserID == userID {
-			now := sql.NullTime{
-				Time:  time.Now(),
-				Valid: true,
-			}
+			now := time.Now()
 			r.s.userPasswords[i] = &model.UserPassword{
 				UserID:       userID,
 				PasswordHash: passwordHash,

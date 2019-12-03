@@ -1,66 +1,37 @@
 package persistence
 
 import (
-	"context"
-	"database/sql"
-	"errors"
-
-	sb "github.com/volatiletech/sqlboiler/boil"
+	"github.com/jinzhu/gorm"
 
 	"github.com/istsh/go-grpc-sample/app/entity/model"
-	"github.com/istsh/go-grpc-sample/app/infrastructure/repository/persistence/boil"
 )
 
 type dbUserPasswordRepository struct {
-	db *sql.DB
+	db *gorm.DB
 }
 
-type txUserPasswordRepository struct {
-	tx *sql.Tx
-}
-
-func toUserPasswordModel(up *boil.UserPassword) *model.UserPassword {
-	return &model.UserPassword{
-		UserID:       model.UserID(up.UserID),
-		PasswordHash: up.PasswordHash,
-		CreatedAt: sql.NullTime{
-			Time:  up.CreatedAt,
-			Valid: true,
-		},
-		UpdatedAt: sql.NullTime{
-			Time:  up.UpdatedAt,
-			Valid: true,
-		},
-	}
-}
-
-func (r dbUserPasswordRepository) Find(ctx context.Context, userID model.UserID) (*model.UserPassword, error) {
-	qm := boil.UserPasswordWhere.UserID.EQ(string(userID))
-
-	up, err := boil.UserPasswords(qm).One(ctx, r.db)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
+func (r dbUserPasswordRepository) Find(userID model.UserID) (*model.UserPassword, error) {
+	up := &model.UserPassword{}
+	if err := r.db.Where("user_id = ?", userID).First(up).Error; err != nil {
+		if gorm.IsRecordNotFoundError(err) {
 			return nil, nil
 		}
 		return nil, err
 	}
-
-	return toUserPasswordModel(up), nil
+	return up, nil
 }
 
-func (r txUserPasswordRepository) Create(ctx context.Context, userID model.UserID, passwordHash string) error {
-	up := boil.UserPassword{
-		UserID:       string(userID),
+func (r dbUserPasswordRepository) Create(userID model.UserID, passwordHash string) error {
+	up := &model.UserPassword{
+		UserID:       userID,
 		PasswordHash: passwordHash,
 	}
-	return up.Insert(ctx, r.tx, sb.Infer())
+	return r.db.Create(up).Error
 }
 
-func (r txUserPasswordRepository) Update(ctx context.Context, userID model.UserID, passwordHash string) error {
-	up := boil.UserPassword{
-		UserID:       string(userID),
-		PasswordHash: passwordHash,
+func (r dbUserPasswordRepository) Update(userID model.UserID, passwordHash string) error {
+	userPassword := &model.UserPassword{
+		UserID: userID,
 	}
-	_, err := up.Update(ctx, r.tx, sb.Infer())
-	return err
+	return r.db.Model(userPassword).Update("password_hash", passwordHash).Error
 }

@@ -1,11 +1,13 @@
 package model
 
-import "database/sql"
+import (
+	"time"
+)
 
 //
 type UserPassword struct {
 	UserID       UserID
 	PasswordHash string
-	CreatedAt    sql.NullTime
-	UpdatedAt    sql.NullTime
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
 }

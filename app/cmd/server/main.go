@@ -1,8 +1,9 @@
 package main
 
 import (
-	"database/sql"
 	"net"
+
+	"github.com/jinzhu/gorm"
 
 	_ "github.com/go-sql-driver/mysql"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
@@ -10,6 +11,7 @@ import (
 	grpc_validator "github.com/grpc-ecosystem/go-grpc-middleware/validator"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	_ "google.golang.org/grpc/encoding/gzip"
 	"google.golang.org/grpc/reflection"
 
 	"github.com/istsh/go-grpc-sample/app/entity/repository"
@@ -21,12 +23,12 @@ import (
 	"github.com/istsh/go-grpc-sample/app/usecase"
 )
 
-func connectDB() *sql.DB {
-	db, err := sql.Open("mysql", "root:password@tcp(127.0.0.1:3306)/sample")
+func connectDB() *gorm.DB {
+	db, err := gorm.Open("mysql", "root:password@tcp(db)/sample?charset=utf8mb4&parseTime=True&loc=UTC")
 	if err != nil {
 		panic(err.Error())
 	}
-
+	db.LogMode(true)
 	return db
 }
 

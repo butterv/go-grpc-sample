@@ -3,7 +3,6 @@ CREATE TABLE users (
     email      VARCHAR(254) NOT NULL,
     created_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    deleted_at DATETIME              DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     INDEX users_email (email)
 ) ENGINE = InnoDB
@@ -23,9 +22,8 @@ CREATE TABLE user_passwords (
 CREATE TABLE user_tokens (
     id         BIGINT       NOT NULL AUTO_INCREMENT,
     user_id    VARCHAR(128) NOT NULL,
-    token      VARCHAR(128) NOT NULL,
+    token      VARCHAR(255) NOT NULL,
     created_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    deleted_at DATETIME              DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     CONSTRAINT fk_user_tokens_user_id
         FOREIGN KEY (user_id) REFERENCES users (id)

@@ -25,7 +25,7 @@ func NewUserUsecase() UserUserCase {
 func (uc *userUserCase) CreateUser(ctx context.Context, tx repository.Transaction, email, password string) error {
 	userID := model.UserID(xid.New().String())
 
-	if err := tx.User().Create(ctx, userID, email); err != nil {
+	if err := tx.User().Create(userID, email); err != nil {
 		return err
 	}
 
@@ -34,11 +34,11 @@ func (uc *userUserCase) CreateUser(ctx context.Context, tx repository.Transactio
 		return err
 	}
 
-	return tx.UserPassword().Create(ctx, userID, string(hashedPassword))
+	return tx.UserPassword().Create(userID, string(hashedPassword))
 }
 
 func (uc *userUserCase) IsCorrectUserPassword(ctx context.Context, con repository.Connection, userID model.UserID, password string) (bool, error) {
-	up, err := con.UserPassword().Find(ctx, userID)
+	up, err := con.UserPassword().Find(userID)
 	if err != nil {
 		return false, err
 	}
@@ -66,7 +66,7 @@ func (uc *userUserCase) CreateUserToken(ctx context.Context, tx repository.Trans
 		return "", err
 	}
 
-	err = tx.UserToken().Create(ctx, userID, tokenString)
+	err = tx.UserToken().Create(userID, tokenString)
 	if err != nil {
 		return "", err
 	}

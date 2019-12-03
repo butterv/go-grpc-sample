@@ -1,25 +1,25 @@
 package persistence
 
 import (
-	"database/sql"
+	"github.com/jinzhu/gorm"
 
 	"github.com/istsh/go-grpc-sample/app/entity/repository"
 )
 
 type dbRepository struct {
-	db *sql.DB
+	db *gorm.DB
 }
 
 type dbConnection struct {
-	db *sql.DB
+	db *gorm.DB
 }
 
 type dbTransaction struct {
-	tx *sql.Tx
+	db *gorm.DB
 }
 
 // NewDBRepository generates a new repository using DB.
-func NewDBRepository(db *sql.DB) repository.Repository {
+func NewDBRepository(db *gorm.DB) repository.Repository {
 	return &dbRepository{
 		db: db,
 	}
@@ -37,18 +37,15 @@ func (con *dbConnection) Close() error {
 }
 
 func (con *dbConnection) RunTransaction(f func(repository.Transaction) error) error {
-	tx, err := con.db.Begin()
-	if err != nil {
-		return err
-	}
+	tx := con.db.Begin()
 
-	err = f(&dbTransaction{tx: tx})
+	err := f(&dbTransaction{db: tx})
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	err = tx.Commit()
+	err = tx.Commit().Error
 	if err != nil {
 		return err
 	}
@@ -69,13 +66,13 @@ func (con *dbConnection) UserToken() repository.UserTokenRepositoryAccess {
 }
 
 func (tx *dbTransaction) User() repository.UserRepositoryModify {
-	return txUserRepository{tx: tx.tx}
+	return dbUserRepository{db: tx.db}
 }
 
 func (tx *dbTransaction) UserPassword() repository.UserPasswordRepositoryModify {
-	return txUserPasswordRepository{tx: tx.tx}
+	return dbUserPasswordRepository{db: tx.db}
 }
 
 func (tx *dbTransaction) UserToken() repository.UserTokenRepositoryModify {
-	return txUserTokenRepository{tx: tx.tx}
+	return dbUserTokenRepository{db: tx.db}
 }

@@ -1,8 +1,6 @@
 package inmemory
 
 import (
-	"context"
-	"database/sql"
 	"time"
 
 	"github.com/istsh/go-grpc-sample/app/entity/model"
@@ -11,17 +9,12 @@ import (
 
 type inmemoryUserRepository struct {
 	repository.UserRepositoryAccess
-
-	s *Store
-}
-
-type inmemoryTxUserRepository struct {
 	repository.UserRepositoryModify
 
 	s *Store
 }
 
-func (r inmemoryUserRepository) Find(ctx context.Context, id model.UserID) (*model.User, error) {
+func (r inmemoryUserRepository) Find(id model.UserID) (*model.User, error) {
 	for _, u := range r.s.users {
 		if u.ID == id {
 			return u, nil
@@ -31,7 +24,7 @@ func (r inmemoryUserRepository) Find(ctx context.Context, id model.UserID) (*mod
 	return nil, nil
 }
 
-func (r inmemoryUserRepository) FindByEmail(ctx context.Context, email string) (*model.User, error) {
+func (r inmemoryUserRepository) FindByEmail(email string) (*model.User, error) {
 	for _, u := range r.s.users {
 		if u.Email == email {
 			return u, nil
@@ -41,11 +34,8 @@ func (r inmemoryUserRepository) FindByEmail(ctx context.Context, email string) (
 	return nil, nil
 }
 
-func (r inmemoryTxUserRepository) Create(ctx context.Context, id model.UserID, email string) error {
-	now := sql.NullTime{
-		Time:  time.Now(),
-		Valid: true,
-	}
+func (r inmemoryUserRepository) Create(id model.UserID, email string) error {
+	now := time.Now()
 
 	u := &model.User{
 		ID:        id,
