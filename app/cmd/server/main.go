@@ -3,12 +3,11 @@ package main
 import (
 	"net"
 
-	"github.com/jinzhu/gorm"
-
 	_ "github.com/go-sql-driver/mysql"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	grpc_validator "github.com/grpc-ecosystem/go-grpc-middleware/validator"
+	"github.com/jinzhu/gorm"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	_ "google.golang.org/grpc/encoding/gzip"
@@ -33,9 +32,6 @@ func connectDB() *gorm.DB {
 }
 
 func newGRPCServer(r repository.Repository, u usecase.UserUserCase) *grpc.Server {
-	l := logrus.New()
-	l.SetFormatter(&logrus.JSONFormatter{})
-
 	s := grpc.NewServer(
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 			interceptor.RequestIDInterceptor(),
