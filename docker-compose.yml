@@ -8,25 +8,17 @@ services:
     ports:
       - 3306:3306
     command: ["mysqld", "--character-set-server", "utf8mb4"]
-  grpc-server:
+  server:
     build:
       context: .
-      target: builder
-    volumes:
-      - ./app:/go/src/github.com/istsh/go-grpc-sample/app
+      dockerfile: DockerfileServer
     tty: true
-    depends_on:
-      - db
-    command: ["scripts/wait.sh", "db", "root", "password", "sample", "go", "run", "app/cmd/server/*.go"]
-  grpc-gateway:
+  client:
     build:
       context: .
-      target: builder
+      dockerfile: DockerfileClient
     ports:
       - 8080:8080
-    volumes:
-      - ./app:/go/src/github.com/istsh/go-grpc-sample/app
     tty: true
     depends_on:
-      - grpc-server
-    command: /bin/sh -c "go build -o grpc-gateway app/cmd/client/*.go && ./grpc-gateway --grpc-server-endpoint=grpc-server:9090"
+      - server

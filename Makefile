@@ -22,15 +22,18 @@ lint:
 	GO111MODULE=on \
 	golint ./...
 
-run:
-	docker-compose -f ./docker-compose.yml up --build
-
-stop:
-	docker-compose -f ./docker-compose.yml stop
-
 generate:
 	GO111MODULE=on \
 	go generate ./...
 
-sqlboiler:
-	sqlboiler mysql
+run:
+	docker-compose up --build client server
+
+stop:
+	docker-compose stop client server
+
+db-run:
+	docker-compose up -d db
+
+db-stop:
+	docker-compose stop db

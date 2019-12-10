@@ -1,0 +1,22 @@
+# image for build
+FROM 1.13.5-stretch
+
+ENV GO111MODULE on
+ENV PROJECT_ROOT /go/src/github.com/visits-works/innovators-api/
+WORKDIR $PROJECT_ROOT
+
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+
+COPY . .
+
+RUN CGO_ENABLED=0 GOOS=linux go build -a ./app/cmd/client
+
+# image for release
+FROM gcr.io/distroless/base:latest as release
+ENV BUILDER_ROOT /go/src/github.com/visits-works/innovators-api/
+ENV PROJECT_ROOT /
+COPY --from=builder $BUILDER_ROOT/client $PROJECT_ROOT/client
+COPY --from=builder $BUILDER_ROOT/.env $PROJECT_ROOT/.env
+CMD ["/client", "--grpc-server-endpoint=server:9090"]
