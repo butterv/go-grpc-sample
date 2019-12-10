@@ -8,7 +8,6 @@ import (
 	"google.golang.org/grpc/metadata"
 
 	"github.com/istsh/go-grpc-sample/app/util/log"
-	"github.com/istsh/go-grpc-sample/app/util/requestid"
 )
 
 func testRequestID(ctx context.Context, _ interface{}) (interface{}, error) {
@@ -23,7 +22,7 @@ func TestRequestIDInterceptor(t *testing.T) {
 	want := "test_request_id"
 
 	m := map[string]string{
-		requestid.DefaultXRequestIDKey: want,
+		XRequestIDKey: want,
 	}
 	ctx := metadata.NewIncomingContext(context.Background(), metadata.New(m))
 	got, err := RequestIDInterceptor()(ctx, nil, nil, testRequestID)

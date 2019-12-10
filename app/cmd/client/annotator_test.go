@@ -6,20 +6,20 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/istsh/go-grpc-sample/app/util/requestid"
+	"github.com/istsh/go-grpc-sample/app/infrastructure/interceptor"
 )
 
 func TestRequestIDAnnotator_NewRequestID(t *testing.T) {
 	ctx := context.Background()
 	req := httptest.NewRequest("GET", "/", nil)
 
-	key := strings.ToLower(requestid.DefaultXRequestIDKey)
+	key := strings.ToLower(interceptor.XRequestIDKey)
 	md := RequestIDAnnotator(ctx, req)
 	header := md[key]
 	if len(header) == 0 {
 		t.Fatalf("%s is not found in header", key)
 	}
-	if header[0] == req.Header.Get(requestid.DefaultXRequestIDKey) {
+	if header[0] == req.Header.Get(interceptor.XRequestIDKey) {
 		t.Error("request ids matched")
 	}
 }
@@ -27,15 +27,15 @@ func TestRequestIDAnnotator_NewRequestID(t *testing.T) {
 func TestRequestIDAnnotator_UseHeaderValue(t *testing.T) {
 	ctx := context.Background()
 	req := httptest.NewRequest("GET", "/", nil)
-	req.Header.Set(requestid.DefaultXRequestIDKey, "request_id")
+	req.Header.Set(interceptor.XRequestIDKey, "request_id")
 
-	key := strings.ToLower(requestid.DefaultXRequestIDKey)
+	key := strings.ToLower(interceptor.XRequestIDKey)
 	md := RequestIDAnnotator(ctx, req)
 	header := md[key]
 	if len(header) == 0 {
 		t.Fatalf("%s is not found in header", key)
 	}
-	if header[0] != req.Header.Get(requestid.DefaultXRequestIDKey) {
+	if header[0] != req.Header.Get(interceptor.XRequestIDKey) {
 		t.Error("request ids mismatched")
 	}
 }
