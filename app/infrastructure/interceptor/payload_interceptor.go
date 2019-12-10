@@ -16,8 +16,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
-
-	"github.com/istsh/go-grpc-sample/app/util/requestid"
 )
 
 var (
@@ -72,7 +70,7 @@ func newLogFields(ctx context.Context, method string, reqPbMsg, resPbMsg interfa
 		if strs, ok := md["x-forwarded-for"]; ok {
 			fields["remote_ip"] = strs[0]
 		}
-		key := strings.ToLower(requestid.DefaultXRequestIDKey)
+		key := strings.ToLower(XRequestIDKey)
 		if strs, ok := md[key]; ok {
 			fields["request_id"] = strs[0]
 		}
