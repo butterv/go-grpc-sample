@@ -70,7 +70,7 @@ func run() error {
 	mux := runtime.NewServeMux(
 		// Set request_id to grpc metadata
 		runtime.WithMetadata(RequestIDAnnotator),
-		runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{}),
+		runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{OrigName: false, EmitDefaults: true}),
 	)
 
 	if err := registerServiceHandlers(ctx, mux); err != nil {
