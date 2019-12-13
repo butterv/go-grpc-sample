@@ -11,12 +11,12 @@ services:
   server:
     build:
       context: .
-      dockerfile: DockerfileServer
+      dockerfile: Dockerfile.server
     tty: true
   client:
     build:
       context: .
-      dockerfile: DockerfileClient
+      dockerfile: Dockerfile.client
     ports:
       - 8080:8080
     tty: true
