@@ -17,8 +17,7 @@ import (
 	"github.com/istsh/go-grpc-sample/app/infrastructure/interceptor"
 	"github.com/istsh/go-grpc-sample/app/infrastructure/repository/persistence"
 	"github.com/istsh/go-grpc-sample/app/infrastructure/server"
-	loginpb "github.com/istsh/go-grpc-sample/app/pb/v1/login"
-	userpb "github.com/istsh/go-grpc-sample/app/pb/v1/user"
+	pbv1 "github.com/istsh/go-grpc-sample/app/pb/v1"
 	"github.com/istsh/go-grpc-sample/app/usecase"
 )
 
@@ -41,8 +40,8 @@ func newGRPCServer(r repository.Repository, u usecase.UserUserCase) *grpc.Server
 		)),
 	)
 
-	loginpb.RegisterLoginServiceServer(s, server.NewLoginServiceServer(r, u))
-	userpb.RegisterUserServiceServer(s, server.NewUserServiceServer(r, u))
+	pbv1.RegisterLoginServiceServer(s, server.NewLoginServiceServer(r, u))
+	pbv1.RegisterUserServiceServer(s, server.NewUserServiceServer(r, u))
 
 	return s
 }

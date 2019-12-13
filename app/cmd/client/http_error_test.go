@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	errorpb "github.com/istsh/go-grpc-sample/app/pb/v1/error"
+	pbv1 "github.com/istsh/go-grpc-sample/app/pb/v1"
 	appstatus "github.com/istsh/go-grpc-sample/app/status"
 )
 
@@ -24,7 +24,7 @@ func TestDefaultHTTPError(t *testing.T) {
 	req, _ := http.NewRequest("", "", nil)
 	marshaler := &runtime.JSONPb{}
 
-	defaultHTTPError(ctx, &runtime.ServeMux{}, marshaler, w, req, err)
+	HTTPError(ctx, &runtime.ServeMux{}, marshaler, w, req, err)
 	if got, want := w.Header().Get("Content-Type"), marshaler.ContentType(); got != want {
 		t.Errorf(`w.Header().Get("Content-Type") = %q; want %q`, got, want)
 	}
@@ -32,8 +32,8 @@ func TestDefaultHTTPError(t *testing.T) {
 		t.Errorf("w.Code = %d; want %d", got, want)
 	}
 
-	want := errorpb.Error{
-		Error: &errorpb.Error_ErrorDetail{
+	want := pbv1.Error{
+		Error: &pbv1.Error_ErrorDetail{
 			ErrorCode: "USER_UNAUTHENTICATED",
 			Locale:    "ja-JP",
 			Message:   "ユーザーの認証ができませんでした。",
@@ -54,7 +54,7 @@ func TestDefaultHTTPError_NoDetails(t *testing.T) {
 	req, _ := http.NewRequest("", "", nil)
 	marshaler := &runtime.JSONPb{}
 
-	defaultHTTPError(ctx, &runtime.ServeMux{}, marshaler, w, req, err)
+	HTTPError(ctx, &runtime.ServeMux{}, marshaler, w, req, err)
 	if got, want := w.Header().Get("Content-Type"), marshaler.ContentType(); got != want {
 		t.Errorf(`w.Header().Get("Content-Type") = %q; want %q`, got, want)
 	}
@@ -62,8 +62,8 @@ func TestDefaultHTTPError_NoDetails(t *testing.T) {
 		t.Errorf("w.Code = %d; want %d", got, want)
 	}
 
-	want := errorpb.Error{
-		Error: &errorpb.Error_ErrorDetail{
+	want := pbv1.Error{
+		Error: &pbv1.Error_ErrorDetail{
 			Message: errMsg,
 		},
 	}
@@ -79,7 +79,7 @@ func TestDefaultHTTPError_ContextType(t *testing.T) {
 	req, _ := http.NewRequest("", "", nil)
 	marshaler := &runtime.JSONPb{}
 
-	defaultHTTPError(ctx, &runtime.ServeMux{}, marshaler, w, req, nil)
+	HTTPError(ctx, &runtime.ServeMux{}, marshaler, w, req, nil)
 	if got, want := w.Header().Get("Content-Type"), marshaler.ContentType(); got != want {
 		t.Errorf(`w.Header().Get("Content-Type") = %q; want %q`, got, want)
 	}
@@ -93,7 +93,7 @@ func TestDefaultHTTPError_NotStatusError(t *testing.T) {
 	req, _ := http.NewRequest("", "", nil)
 	marshaler := &runtime.JSONPb{}
 
-	defaultHTTPError(ctx, &runtime.ServeMux{}, marshaler, w, req, err)
+	HTTPError(ctx, &runtime.ServeMux{}, marshaler, w, req, err)
 	if got, want := w.Header().Get("Content-Type"), marshaler.ContentType(); got != want {
 		t.Errorf(`w.Header().Get("Content-Type") = %q; want %q`, got, want)
 	}
@@ -101,8 +101,8 @@ func TestDefaultHTTPError_NotStatusError(t *testing.T) {
 		t.Errorf("w.Code = %d; want %d", got, want)
 	}
 
-	want := errorpb.Error{
-		Error: &errorpb.Error_ErrorDetail{
+	want := pbv1.Error{
+		Error: &pbv1.Error_ErrorDetail{
 			Message: err.Error(),
 		},
 	}

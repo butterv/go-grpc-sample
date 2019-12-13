@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/istsh/go-grpc-sample/app/entity/repository"
-	userpb "github.com/istsh/go-grpc-sample/app/pb/v1/user"
+	pbv1 "github.com/istsh/go-grpc-sample/app/pb/v1"
 	appstatus "github.com/istsh/go-grpc-sample/app/status"
 	"github.com/istsh/go-grpc-sample/app/usecase"
 	"github.com/istsh/go-grpc-sample/app/util/log"
@@ -20,7 +20,7 @@ type userServiceServer struct {
 }
 
 // NewUserServiceServer creates user service server implementation.
-func NewUserServiceServer(r repository.Repository, u usecase.UserUserCase) userpb.UserServiceServer {
+func NewUserServiceServer(r repository.Repository, u usecase.UserUserCase) pbv1.UserServiceServer {
 	return &userServiceServer{
 		r: r,
 		u: u,
@@ -31,7 +31,7 @@ func (s *userServiceServer) Authenticate(ctx context.Context, req interface{}) (
 	return ctx, nil
 }
 
-func (s *userServiceServer) CreateUser(ctx context.Context, req *userpb.CreateUserRequest) (*userpb.CreateUserResponse, error) {
+func (s *userServiceServer) CreateUser(ctx context.Context, req *pbv1.CreateUserRequest) (*pbv1.CreateUserResponse, error) {
 	logger := log.New(ctx)
 	con := s.r.NewConnection()
 
@@ -47,5 +47,5 @@ func (s *userServiceServer) CreateUser(ctx context.Context, req *userpb.CreateUs
 		return nil, appstatus.FailedToCreateUser.Err()
 	}
 
-	return &userpb.CreateUserResponse{}, nil
+	return &pbv1.CreateUserResponse{}, nil
 }

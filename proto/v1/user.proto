@@ -1,25 +1,24 @@
 syntax = "proto3";
 
-package login;
-option go_package = "github.com/istsh/go-grpc-sample/app/pb/v1/login";
+package v1;
+option go_package = "github.com/istsh/go-grpc-sample/app/pb/v1";
 
 import "google/api/annotations.proto";
 import "validate/validate.proto";
 
-service LoginService {
-    rpc Login(LoginRequest) returns (LoginResponse) {
+service UserService {
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
         option (google.api.http) = {
-            post: "/v1/login"
+            post: "/v1/user"
             body: "*"
         };
     }
 }
 
-message LoginRequest {
+message CreateUserRequest {
     string email = 1 [(validate.rules).string = { min_len: 3, max_len: 254 }];
     string password = 2 [(validate.rules).string = { min_len: 8, max_len: 64 }];
 }
 
-message LoginResponse {
-    string token = 1;
+message CreateUserResponse {
 }

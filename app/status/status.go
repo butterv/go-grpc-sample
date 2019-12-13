@@ -5,7 +5,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	errorpb "github.com/istsh/go-grpc-sample/app/pb/v1/error"
+	pbv1 "github.com/istsh/go-grpc-sample/app/pb/v1"
 )
 
 const (
@@ -25,7 +25,7 @@ func must(s *status.Status, err error) *status.Status {
 var (
 	// AnErrorHasOccurred is a gRPC status when an error occurs.
 	AnErrorHasOccurred = must(status.New(codes.Internal, "an error occurred").WithDetails(
-		&errorpb.ErrorCode{
+		&pbv1.ErrorCode{
 			ErrorCode: "AN_ERROR_HAS_OCCURRED",
 		},
 		&errdetails.LocalizedMessage{
@@ -36,7 +36,7 @@ var (
 
 	// Unauthenticated is a gRPC status when `auth` cannot be gotten from the context.
 	Unauthenticated = must(status.New(codes.Unauthenticated, "not authenticated").WithDetails(
-		&errorpb.ErrorCode{
+		&pbv1.ErrorCode{
 			ErrorCode: "USER_UNAUTHENTICATED",
 		},
 		&errdetails.LocalizedMessage{
@@ -47,7 +47,7 @@ var (
 
 	//
 	FailedToCreateUser = must(status.New(codes.Internal, "failed to create user").WithDetails(
-		&errorpb.ErrorCode{
+		&pbv1.ErrorCode{
 			ErrorCode: "FAILED_TO_CREATE_USER",
 		},
 		&errdetails.LocalizedMessage{
@@ -62,7 +62,7 @@ var (
 
 	//
 	FailedToChangePassword = must(status.New(codes.Internal, "failed to change password").WithDetails(
-		&errorpb.ErrorCode{
+		&pbv1.ErrorCode{
 			ErrorCode: "FAILED_TO_CHANGE_PASSWORD",
 		},
 		&errdetails.LocalizedMessage{
@@ -77,7 +77,7 @@ var (
 
 	// NoSuchUser is a gRPC status that indicates the specified user isn't found.
 	NoSuchUser = must(status.New(codes.InvalidArgument, "no such a user").WithDetails(
-		&errorpb.ErrorCode{
+		&pbv1.ErrorCode{
 			ErrorCode: "NO_SUCH_USER",
 		},
 		&errdetails.LocalizedMessage{
@@ -88,7 +88,7 @@ var (
 
 	// FailedToLogin is a gRPC status when user failed to login.
 	FailedToLogin = must(status.New(codes.Unauthenticated, "failed to login").WithDetails(
-		&errorpb.ErrorCode{
+		&pbv1.ErrorCode{
 			ErrorCode: "USER_FAILED_TO_LOGIN",
 		},
 		&errdetails.LocalizedMessage{
