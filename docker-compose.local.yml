@@ -13,6 +13,9 @@ services:
       context: .
       dockerfile: Dockerfile.server
     tty: true
+    depends_on:
+      - db
+    command: /bin/sh -c "/usr/bin/wait-for-it -t 60 db:3306 -- /server"
   client:
     build:
       context: .
@@ -22,3 +25,4 @@ services:
     tty: true
     depends_on:
       - server
+    command: /bin/sh -c "/usr/bin/wait-for-it -t 60 db:3306 -- /client --grpc-server-endpoint=server:9090"

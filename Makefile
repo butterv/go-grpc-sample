@@ -27,13 +27,13 @@ generate:
 	go generate ./...
 
 run:
-	docker-compose up --build client server
+	docker-compose -f docker-compose.local.yml up --build client server
 
 stop:
-	docker-compose stop client server
+	docker-compose -f docker-compose.local.yml stop client server
 
 db-run:
-	docker-compose up -d db
+	docker-compose -f docker-compose.local.yml up -d db
 
 db-stop:
-	docker-compose stop db
+	docker-compose -f docker-compose.local.yml stop db
