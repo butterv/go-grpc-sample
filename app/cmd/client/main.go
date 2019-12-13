@@ -65,7 +65,7 @@ func run() error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	runtime.HTTPError = defaultHTTPError
+	runtime.HTTPError = HTTPError
 
 	mux := runtime.NewServeMux(
 		// Set request_id to grpc metadata

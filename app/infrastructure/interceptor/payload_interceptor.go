@@ -64,15 +64,14 @@ func newLogFields(ctx context.Context, method string, reqPbMsg, resPbMsg interfa
 	}
 
 	if md, ok := metadata.FromOutgoingContext(ctx); ok {
-		if strs, ok := md["grpcgateway-user-agent"]; ok {
-			fields["user-agent"] = strs[0]
+		if values := md.Get("grpcgateway-user-agent"); len(values) > 0 {
+			fields["user-agent"] = values[0]
 		}
-		if strs, ok := md["x-forwarded-for"]; ok {
-			fields["remote_ip"] = strs[0]
+		if values := md.Get("x-forwarded-for"); len(values) > 0 {
+			fields["remote_ip"] = values[0]
 		}
-		key := strings.ToLower(XRequestIDKey)
-		if strs, ok := md[key]; ok {
-			fields["request_id"] = strs[0]
+		if values := md.Get(XRequestIDKey); len(values) > 0 {
+			fields["request_id"] = values[0]
 		}
 	}
 	if p, ok := reqPbMsg.(proto.Message); ok {

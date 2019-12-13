@@ -6,19 +6,18 @@ import (
 	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	errorpb "github.com/istsh/go-grpc-sample/app/pb/v1/error"
+	appstatus "github.com/istsh/go-grpc-sample/app/status"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/grpclog"
 	"google.golang.org/grpc/status"
-
-	errorpb "github.com/istsh/go-grpc-sample/app/pb/v1/error"
-	appstatus "github.com/istsh/go-grpc-sample/app/status"
 )
 
-// DefaultHTTPError is the default implementation of HTTPError.
+// HTTPError is the default implementation of HTTPError.
 // See. https://github.com/grpc-ecosystem/grpc-gateway/blob/master/runtime/errors.go#L89
 // Except for a part, it is the same code as runtime.DefaultHTTPError.
-func defaultHTTPError(_ context.Context, _ *runtime.ServeMux, marshaler runtime.Marshaler, w http.ResponseWriter, _ *http.Request, err error) {
+func HTTPError(_ context.Context, _ *runtime.ServeMux, marshaler runtime.Marshaler, w http.ResponseWriter, _ *http.Request, err error) {
 	const fallback = `{"error": "failed to marshal error message"}`
 
 	s, ok := status.FromError(err)

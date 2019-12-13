@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"net/http"
-	"strings"
 
 	"github.com/rs/xid"
 	"google.golang.org/grpc/metadata"
@@ -18,8 +17,7 @@ func RequestIDAnnotator(ctx context.Context, req *http.Request) metadata.MD {
 		requestID = xid.New().String()
 	}
 
-	key := strings.ToLower(interceptor.XRequestIDKey)
 	return metadata.New(map[string]string{
-		key: requestID,
+		interceptor.XRequestIDKey: requestID,
 	})
 }
