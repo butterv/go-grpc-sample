@@ -32,6 +32,10 @@ var (
 			Locale:  LocaleJaJp,
 			Message: "エラーが発生しました。",
 		},
+		&errdetails.LocalizedMessage{
+			Locale:  LocaleEnUs,
+			Message: "an error has occurred",
+		},
 	))
 
 	// Unauthenticated is a gRPC status when `auth` cannot be gotten from the context.
@@ -42,6 +46,10 @@ var (
 		&errdetails.LocalizedMessage{
 			Locale:  LocaleJaJp,
 			Message: "ユーザーの認証ができませんでした。",
+		},
+		&errdetails.LocalizedMessage{
+			Locale:  LocaleEnUs,
+			Message: "Unauthenticated",
 		},
 	))
 
@@ -84,6 +92,10 @@ var (
 			Locale:  LocaleJaJp,
 			Message: "ユーザーが見つかりませんでした。",
 		},
+		&errdetails.LocalizedMessage{
+			Locale:  LocaleEnUs,
+			Message: "No such user",
+		},
 	))
 
 	// FailedToLogin is a gRPC status when user failed to login.
@@ -97,7 +109,7 @@ var (
 		},
 		&errdetails.LocalizedMessage{
 			Locale:  LocaleEnUs,
-			Message: "Login failed",
+			Message: "Failed to login",
 		},
 	))
 )
