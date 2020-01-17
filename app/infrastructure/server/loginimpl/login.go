@@ -1,33 +1,15 @@
-package server
+package loginimpl
 
 import (
 	"context"
 
 	"github.com/istsh/go-grpc-sample/app/entity/repository"
-	pbv1 "github.com/istsh/go-grpc-sample/app/pb/v1"
+	loginpb "github.com/istsh/go-grpc-sample/app/pb/v1/login"
 	appstatus "github.com/istsh/go-grpc-sample/app/status"
-	"github.com/istsh/go-grpc-sample/app/usecase"
 	"github.com/istsh/go-grpc-sample/app/util/log"
 )
 
-type loginServiceServer struct {
-	r repository.Repository
-	u usecase.UserUserCase
-}
-
-// NewLoginServiceServer creates login service server implementation.
-func NewLoginServiceServer(r repository.Repository, u usecase.UserUserCase) pbv1.LoginServiceServer {
-	return &loginServiceServer{
-		r: r,
-		u: u,
-	}
-}
-
-func (s *loginServiceServer) Authenticate(ctx context.Context, req interface{}) (context.Context, error) {
-	return ctx, nil
-}
-
-func (s *loginServiceServer) Login(ctx context.Context, req *pbv1.LoginRequest) (*pbv1.LoginResponse, error) {
+func (s *loginServiceServer) Login(ctx context.Context, req *loginpb.LoginRequest) (*loginpb.LoginResponse, error) {
 	logger := log.New(ctx)
 	con := s.r.NewConnection()
 
@@ -64,7 +46,7 @@ func (s *loginServiceServer) Login(ctx context.Context, req *pbv1.LoginRequest) 
 		return nil, appstatus.FailedToLogin.Err()
 	}
 
-	return &pbv1.LoginResponse{
+	return &loginpb.LoginResponse{
 		Token: tokenString,
 	}, nil
 }

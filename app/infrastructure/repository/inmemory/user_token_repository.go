@@ -2,7 +2,6 @@ package inmemory
 
 import (
 	"context"
-	"database/sql"
 	"time"
 
 	"github.com/istsh/go-grpc-sample/app/entity/model"
@@ -32,16 +31,11 @@ func (r inmemoryUserTokenRepository) FindByToken(ctx context.Context, token stri
 }
 
 func (r inmemoryTxUserTokenRepository) Create(ctx context.Context, userID model.UserID, token string) error {
-	now := sql.NullTime{
-		Time:  time.Now(),
-		Valid: true,
-	}
-
 	ut := &model.UserToken{
 		ID:        model.UserTokenID(len(r.s.userTokens) + 1),
 		UserID:    userID,
 		Token:     token,
-		CreatedAt: now,
+		CreatedAt: time.Now(),
 	}
 	r.s.AddUserTokens(ut)
 

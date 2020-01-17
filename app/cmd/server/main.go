@@ -3,6 +3,9 @@ package main
 import (
 	"net"
 
+	"github.com/istsh/go-grpc-sample/app/infrastructure/server/loginimpl"
+	"github.com/istsh/go-grpc-sample/app/infrastructure/server/userimpl"
+
 	_ "github.com/go-sql-driver/mysql"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
@@ -16,7 +19,6 @@ import (
 	"github.com/istsh/go-grpc-sample/app/entity/repository"
 	"github.com/istsh/go-grpc-sample/app/infrastructure/interceptor"
 	"github.com/istsh/go-grpc-sample/app/infrastructure/repository/persistence"
-	"github.com/istsh/go-grpc-sample/app/infrastructure/server"
 	loginpb "github.com/istsh/go-grpc-sample/app/pb/v1/login"
 	userpb "github.com/istsh/go-grpc-sample/app/pb/v1/user"
 	"github.com/istsh/go-grpc-sample/app/usecase"
@@ -41,8 +43,8 @@ func newGRPCServer(r repository.Repository, u usecase.UserUserCase) *grpc.Server
 		)),
 	)
 
-	loginpb.RegisterLoginServiceServer(s, server.NewLoginServiceServer(r, u))
-	userpb.RegisterUserServiceServer(s, server.NewUserServiceServer(r, u))
+	loginpb.RegisterLoginServiceServer(s, loginimpl.NewLoginServiceServer(r, u))
+	userpb.RegisterUserServiceServer(s, userimpl.NewUserServiceServer(r, u))
 
 	return s
 }
