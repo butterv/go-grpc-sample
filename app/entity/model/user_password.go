@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-//
+// UserPassword has a user id and password hash.
 type UserPassword struct {
 	UserID       UserID
 	PasswordHash string
