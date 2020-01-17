@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package v1;
-option go_package = "github.com/istsh/go-grpc-sample/app/pb/v1";
+option go_package = "github.com/istsh/go-grpc-sample/app/pb/v1/user";
 
 import "google/api/annotations.proto";
 import "validate/validate.proto";
