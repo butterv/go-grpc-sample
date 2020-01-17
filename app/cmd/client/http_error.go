@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	pbv1 "github.com/istsh/go-grpc-sample/app/pb/v1"
+	errorpb "github.com/istsh/go-grpc-sample/app/pb/v1/error"
 	appstatus "github.com/istsh/go-grpc-sample/app/status"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
@@ -35,11 +35,11 @@ func HTTPError(_ context.Context, _ *runtime.ServeMux, marshaler runtime.Marshal
 	w.Header().Set("Content-Type", contentType)
 
 	// This block is the original.
-	ed := &pbv1.Error_ErrorDetail{}
+	ed := &errorpb.Error_ErrorDetail{}
 	if len(s.Details()) > 0 {
 		for _, detail := range s.Details() {
 			switch v := detail.(type) {
-			case *pbv1.ErrorCode:
+			case *errorpb.ErrorCode:
 				ed.ErrorCode = v.GetErrorCode()
 			case *errdetails.LocalizedMessage:
 				if ed.GetMessage() != "" {
@@ -55,7 +55,7 @@ func HTTPError(_ context.Context, _ *runtime.ServeMux, marshaler runtime.Marshal
 	} else {
 		ed.Message = s.Message()
 	}
-	e := pbv1.Error{
+	e := errorpb.Error{
 		Error: ed,
 	}
 

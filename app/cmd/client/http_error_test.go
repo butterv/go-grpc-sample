@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	pbv1 "github.com/istsh/go-grpc-sample/app/pb/v1"
+	errorpb "github.com/istsh/go-grpc-sample/app/pb/v1/error"
 	appstatus "github.com/istsh/go-grpc-sample/app/status"
 )
 
@@ -32,8 +32,8 @@ func TestDefaultHTTPError(t *testing.T) {
 		t.Errorf("w.Code = %d; want %d", got, want)
 	}
 
-	want := pbv1.Error{
-		Error: &pbv1.Error_ErrorDetail{
+	want := errorpb.Error{
+		Error: &errorpb.Error_ErrorDetail{
 			ErrorCode: "USER_UNAUTHENTICATED",
 			Locale:    "ja-JP",
 			Message:   "ユーザーの認証ができませんでした。",
@@ -62,8 +62,8 @@ func TestDefaultHTTPError_NoDetails(t *testing.T) {
 		t.Errorf("w.Code = %d; want %d", got, want)
 	}
 
-	want := pbv1.Error{
-		Error: &pbv1.Error_ErrorDetail{
+	want := errorpb.Error{
+		Error: &errorpb.Error_ErrorDetail{
 			Message: errMsg,
 		},
 	}
@@ -101,8 +101,8 @@ func TestDefaultHTTPError_NotStatusError(t *testing.T) {
 		t.Errorf("w.Code = %d; want %d", got, want)
 	}
 
-	want := pbv1.Error{
-		Error: &pbv1.Error_ErrorDetail{
+	want := errorpb.Error{
+		Error: &errorpb.Error_ErrorDetail{
 			Message: err.Error(),
 		},
 	}
