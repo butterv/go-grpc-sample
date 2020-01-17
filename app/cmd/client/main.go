@@ -15,7 +15,8 @@ import (
 	"google.golang.org/grpc/encoding/gzip"
 
 	"github.com/istsh/go-grpc-sample/app/infrastructure/interceptor"
-	pbv1 "github.com/istsh/go-grpc-sample/app/pb/v1"
+	loginpb "github.com/istsh/go-grpc-sample/app/pb/v1/login"
+	userpb "github.com/istsh/go-grpc-sample/app/pb/v1/user"
 )
 
 var (
@@ -48,11 +49,11 @@ func grpcDialOptions() []grpc.DialOption {
 func registerServiceHandlers(ctx context.Context, mux *runtime.ServeMux) error {
 	opts := grpcDialOptions()
 
-	if err := pbv1.RegisterLoginServiceHandlerFromEndpoint(ctx, mux, *grpcServerEndpoint, opts); err != nil {
+	if err := loginpb.RegisterLoginServiceHandlerFromEndpoint(ctx, mux, *grpcServerEndpoint, opts); err != nil {
 		return err
 	}
 
-	if err := pbv1.RegisterUserServiceHandlerFromEndpoint(ctx, mux, *grpcServerEndpoint, opts); err != nil {
+	if err := userpb.RegisterUserServiceHandlerFromEndpoint(ctx, mux, *grpcServerEndpoint, opts); err != nil {
 		return err
 	}
 
